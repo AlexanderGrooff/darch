@@ -62,6 +62,12 @@ func GetResolver(clicontext *cli.Context) (remotes.Resolver, error) {
 		}
 	} else if rt := clicontext.String("refresh"); rt != "" {
 		secret = rt
+	} else {
+		// Get DOCKER_HOME
+		// Find .docker/config.json
+		// Parse host
+		// Decode to base64
+		// Parse creds from basicauth
 	}
 
 	options.Credentials = func(host string) (string, string, error) {
