@@ -11,6 +11,7 @@ import (
 	"github.com/urfave/cli"
 	"net"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 )
@@ -33,6 +34,11 @@ var (
 		cli.StringFlag{
 			Name:  "refresh",
 			Usage: "refresh token for authorization server",
+		},
+		cli.StringFlag{
+			Name:  "docker-config,c",
+			Usage: "docker config filepath",
+			DefaultText: os.Getenv("HOME") + "/.docker/config.json",
 		},
 	}
 )
@@ -62,7 +68,7 @@ func GetResolver(clicontext *cli.Context) (remotes.Resolver, error) {
 		}
 	} else if rt := clicontext.String("refresh"); rt != "" {
 		secret = rt
-	} else {
+	} else _, err := os.Stat(clicontext.String("docker-config")); err == nil {
 		// Get DOCKER_HOME
 		// Find .docker/config.json
 		// Parse host
